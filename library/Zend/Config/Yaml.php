@@ -16,7 +16,7 @@
  * @package   Zend_Config
  * @copyright Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
- * @version   $Id: Yaml.php 23808 2011-03-16 21:26:56Z matthew $
+ * @version   $Id: Yaml.php 24092 2011-05-31 02:43:28Z adamlundrigan $
  */
 
 /**
@@ -124,9 +124,9 @@ class Zend_Config_Yaml extends Zend_Config
      * - skip_extends: whether or not to skip processing of parent configuration
      * - yaml_decoder: a callback to use to decode the Yaml source
      *
-     * @param  string  $yaml     YAML file to process
-     * @param  mixed   $section Section to process
-     * @param  boolean $options Whether modifiacations are allowed at runtime
+     * @param  string        $yaml     YAML file to process
+     * @param  mixed         $section  Section to process
+     * @param  array|boolean $options 
      */
     public function __construct($yaml, $section = null, $options = false)
     {
@@ -285,13 +285,12 @@ class Zend_Config_Yaml extends Zend_Config
         $inIndent = false;
         while (list($n, $line) = each($lines)) {
             $lineno = $n + 1;
+            
+            $line = rtrim(preg_replace("/#.*$/", "", $line));
             if (strlen($line) == 0) {
                 continue;
             }
-            if ($line[0] == '#') {
-                // comment
-                continue;
-            }
+
             $indent = strspn($line, " ");
 
             // line without the spaces
@@ -315,7 +314,7 @@ class Zend_Config_Yaml extends Zend_Config
                 // key: value
                 if (strlen($m[2])) {
                     // simple key: value
-                    $value = $m[2];
+                    $value = rtrim(preg_replace("/#.*$/", "", $m[2]));
                     // Check for booleans and constants
                     if (preg_match('/^(t(rue)?|on|y(es)?)$/i', $value)) {
                         $value = true;
