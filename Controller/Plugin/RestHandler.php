@@ -70,7 +70,7 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
         if (in_array($request->getParam('format', 'none'), $this->responseTypes)) {
             $format = $request->getParam('format');
         } else {
-            $bestMimeType = $this->negotiateContentType();
+            $bestMimeType = $this->negotiateContentType($request);
             $format = $this->responseTypes[$bestMimeType];
         }
 
@@ -263,7 +263,7 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
         return $retVal;
     }
 
-    private function negotiateContentType()
+    private function negotiateContentType($request)
     {
         if (function_exists('http_negotiate_content_type')) {
             return http_negotiate_content_type(array_keys($this->responseTypes));
