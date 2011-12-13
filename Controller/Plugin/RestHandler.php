@@ -88,9 +88,14 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
      */
     private function handleRequestBody(Zend_Controller_Request_Abstract $request)
     {
+        $header = strtolower($request->getHeader('Content-Type'));
+
+        // cleanup the charset part
+        $header = current(explode(';', $header));
+
         // detect request body content type
         foreach ($this->requestTypes as $contentType) {
-            if (strtolower($request->getHeader('Content-Type')) == $contentType) {
+            if ($header == $contentType) {
                 break;
             }
         }
