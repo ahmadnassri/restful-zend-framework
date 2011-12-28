@@ -175,19 +175,19 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
                     case 'text/javascript':
                     case 'application/json':
                     case 'application/javascript':
-                        $_POST = Zend_Json::decode($rawBody, Zend_Json::TYPE_OBJECT);
+                        $_POST = (array) Zend_Json::decode($rawBody, Zend_Json::TYPE_OBJECT);
                         break;
 
                     case 'text/xml':
                     case 'application/xml':
                         $json = @Zend_Json::fromXml($rawBody);
-                        $_POST = Zend_Json::decode($json, Zend_Json::TYPE_OBJECT)->request;
+                        $_POST = (array) Zend_Json::decode($json, Zend_Json::TYPE_OBJECT)->request;
                         break;
 
                     case 'text/php':
                     case 'application/x-httpd-php':
                     case 'application/x-httpd-php-source':
-                        $_POST = unserialize($rawBody);
+                        $_POST = (array) unserialize($rawBody);
                         break;
 
                     default:
@@ -195,7 +195,7 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
                         break;
                 }
 
-                $request->setParams((array) $_POST);
+                $request->setParams($_POST);
 
             } catch (Exception $e) {
                 $request->dispatchError(400, 'Invalid Payload Format');
