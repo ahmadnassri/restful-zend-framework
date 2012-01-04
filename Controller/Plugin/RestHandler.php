@@ -191,7 +191,7 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
                         break;
 
                     default:
-                        $_POST = $rawBody;
+                        $_POST = (array) $rawBody;
                         break;
                 }
 

@@ -84,7 +84,7 @@ class REST_Serializer_Adapter_Xml extends Zend_Serializer_Adapter_AdapterAbstrac
                             $this->createNodes($dom, $value, $child);
                         } else {
                             if (is_numeric($key)) {
-                                $key = sprintf('%s_%s', $parent->tagName, $key);
+                                $key = sprintf('%s', $this->depluralize($parent->tagName));
                             }
 
                             $child = $parent->appendChild($dom->createElement($key));
@@ -95,5 +95,36 @@ class REST_Serializer_Adapter_Xml extends Zend_Serializer_Adapter_AdapterAbstrac
 
                 break;
         }
+    }
+
+    private function depluralize($word) {
+        $rules = array(
+            'ss' => false,
+            'os' => 'o',
+            'ies' => 'y',
+            'xes' => 'x',
+            'oes' => 'o',
+            'ies' => 'y',
+            'ves' => 'f',
+            's' => null
+        );
+
+        // Loop through all the rules
+        foreach(array_keys($rules) as $key) {
+            // If the end of the word doesn't match the key, it's not a candidate for replacement.
+            if (substr($word, (strlen($key) * -1)) != $key) {
+                continue;
+            }
+
+            // If the value of the key is false, stop looping  and return the original version of the word.
+            if ($key === false) {
+                return $word;
+            }
+
+            // apply the rule
+            return substr($word, 0, strlen($word) - strlen($key)) . $rules[$key];
+        }
+
+        return $word;
     }
 }
