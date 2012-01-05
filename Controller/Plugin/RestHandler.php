@@ -50,15 +50,19 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
     {
         // send the HTTP Vary header
         $this->_response->setHeader('Vary', 'Accept');
+
+        // Cross-Origin Resource Sharing (CORS)
+        // TODO: probably should be an environment setting?
+        $this->_response->setHeader('Access-Control-Max-Age', '86400');
         $this->_response->setHeader('Access-Control-Allow-Origin', '*');
         $this->_response->setHeader('Access-Control-Allow-Credentials', 'true');
         $this->_response->setHeader('Access-Control-Allow-Headers', 'Accept, Content-Type, X-Requested-With, X-HTTP-Method-Override');
 
-        // process requested action
-        $this->handleActions($request);
-
         // set response format
         $this->setResponseFormat($request);
+
+        // process requested action
+        $this->handleActions($request);
 
         // process request body
         $this->handleRequestBody($request);
@@ -84,6 +88,45 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
             $request->dispatchError(415, 'Unsupported Media/Format Type');
         } else {
             $request->setParam('format', $format);
+        }
+    }
+
+    /**
+     * determines whether the requested actions exists
+     * otherwise, triggers optionsAction.
+     */
+    private function handleActions(Zend_Controller_Request_Abstract $request)
+    {
+        // get the dispatcher to load the controller class
+        $controller = $this->dispatcher->getControllerClass($request);
+        $className  = $this->dispatcher->loadClass($controller);
+
+        // extrac the actions through reflection
+        $class = new ReflectionClass($className);
+
+        if ($this->isRestClass($class)) {
+            $methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
+
+            $actions = array();
+
+            foreach ($methods as &$method) {
+                $name = strtoupper($method->name);
+
+                if (substr($name, -6) == 'ACTION') {
+                    $actions[$name] = str_replace('ACTION', null, $name);
+                }
+            }
+
+            // nobody likes indexAction
+            unset($actions['INDEXACTION']);
+
+            // Cross-Origin Resource Sharing (CORS)
+            $this->_response->setHeader('Access-Control-Allow-Methods', implode(', ', $actions));
+
+            if (!in_array(strtoupper($request->getMethod()), $actions)) {
+                $request->setActionName('options');
+                $request->setDispatched(true);
+            }
         }
     }
 
@@ -208,43 +251,8 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
     }
 
     /**
-     * determines whether the requested actions exist or not
-     * sends an OPTIONS response if not
-     */
-    private function handleActions(Zend_Controller_Request_Abstract $request)
-    {
-        // get the dispatcher to load the controller class
-        $controller = $this->dispatcher->getControllerClass($request);
-        $className  = $this->dispatcher->loadClass($controller);
-
-        // extrac the actions through reflection
-        $class = new ReflectionClass($className);
-
-        if ($this->isRestClass($class)) {
-            $methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
-
-            $actions = array();
-
-            foreach ($methods as &$method) {
-                $name = strtoupper($method->name);
-
-                if (substr($name, -6) == 'ACTION') {
-                    $actions[$name] = str_replace('ACTION', null, $name);
-                }
-            }
-
-            // nobody likes indexAction
-            unset($actions['INDEXACTION']);
-
-            $this->_response->setHeader('Access-Control-Allow-Methods', implode(', ', $actions));
-
-            if (!in_array(strtoupper($request->getMethod()), $actions)) {
-                $request->setActionName('options');
-                $request->setDispatched(true);
-            }
-        }
-    }
-
+     * determines if the requested controller is a RESTful controller
+     **/
     private function isRestClass($class)
     {
         if ($class === false) {
@@ -256,6 +264,10 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
         }
     }
 
+    /**
+     * utility function to replace http_parse_headers when its not available
+     * see: http://pecl.php.net/pecl_http
+     **/
     private function parseHeaders($header)
     {
         if (function_exists('http_parse_headers')) {
@@ -278,6 +290,10 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
         return $retVal;
     }
 
+    /**
+     * utility function to replace http_negotiate_content_type when its not available
+     * see: http://pecl.php.net/pecl_http
+     **/
     private function negotiateContentType($request)
     {
         if (function_exists('http_negotiate_content_type')) {
