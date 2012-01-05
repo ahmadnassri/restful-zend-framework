@@ -50,15 +50,18 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
     {
         // send the HTTP Vary header
         $this->_response->setHeader('Vary', 'Accept');
+        $this->_response->setHeader('Access-Control-Allow-Origin', '*');
+        $this->_response->setHeader('Access-Control-Allow-Credentials', 'true');
+        $this->_response->setHeader('Access-Control-Allow-Headers', 'Accept, Content-Type, X-Requested-With, X-HTTP-Method-Override');
+
+        // process requested action
+        $this->handleActions($request);
 
         // set response format
         $this->setResponseFormat($request);
 
         // process request body
         $this->handleRequestBody($request);
-
-        // process requested action
-        $this->handleActions($request);
     }
 
     /**
@@ -223,14 +226,19 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
             $actions = array();
 
             foreach ($methods as &$method) {
-                $name = strtolower($method->name);
+                $name = strtoupper($method->name);
 
-                if (substr($name, -6) == 'action') {
-                    $actions[] = str_replace('action', null, $name);
+                if (substr($name, -6) == 'ACTION') {
+                    $actions[$name] = str_replace('ACTION', null, $name);
                 }
             }
 
-            if (!in_array(strtolower($request->getMethod()), $actions)) {
+            // nobody likes indexAction
+            unset($actions['INDEXACTION']);
+
+            $this->_response->setHeader('Access-Control-Allow-Methods', implode(', ', $actions));
+
+            if (!in_array(strtoupper($request->getMethod()), $actions)) {
                 $request->setActionName('options');
                 $request->setDispatched(true);
             }

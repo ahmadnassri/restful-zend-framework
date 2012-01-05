@@ -65,6 +65,9 @@ abstract class REST_Controller extends Zend_Controller_Action
             }
         }
 
+        // nobody likes indexAction
+        unset($actions['INDEXACTION']);
+
         $this->_response->setBody(null);
         $this->_response->setHeader('Allow', implode(', ', $actions));
         $this->_response->setHttpResponseCode(405);
