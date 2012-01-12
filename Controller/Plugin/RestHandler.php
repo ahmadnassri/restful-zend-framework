@@ -85,7 +85,8 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
 
         if ($format == false) {
             $request->setParam('format', $this->defaultFormat);
-            $request->dispatchError(415, 'Unsupported Media/Format Type');
+            if ($request->isOptions() === FALSE)
+                $request->dispatchError(415, 'Unsupported Media/Format Type');
         } else {
             $request->setParam('format', $format);
         }
