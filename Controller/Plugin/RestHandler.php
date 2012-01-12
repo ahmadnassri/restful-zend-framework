@@ -101,7 +101,7 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
         $controller = $this->dispatcher->getControllerClass($request);
         $className  = $this->dispatcher->loadClass($controller);
 
-        // extrac the actions through reflection
+        // extract the actions through reflection
         $class = new ReflectionClass($className);
 
         if ($this->isRestClass($class)) {
@@ -112,20 +112,17 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
             foreach ($methods as &$method) {
                 $name = strtoupper($method->name);
 
-                if (substr($name, -6) == 'ACTION') {
+                if (substr($name, -6) == 'ACTION' && $name != 'INDEXACTION') {
                     $actions[$name] = str_replace('ACTION', null, $name);
                 }
             }
-
-            // nobody likes indexAction
-            unset($actions['INDEXACTION']);
 
             // Cross-Origin Resource Sharing (CORS)
             $this->_response->setHeader('Access-Control-Allow-Methods', implode(', ', $actions));
 
             if (!in_array(strtoupper($request->getMethod()), $actions)) {
-                $request->setActionName('options');
-                $request->setDispatched(true);
+                $request->dispatchError(405, 'Method Not Allowed');
+                $this->_response->setHeader('Allow', implode(', ', $actions));
             }
         }
     }

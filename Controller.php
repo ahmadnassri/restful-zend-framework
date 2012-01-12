@@ -45,7 +45,7 @@ abstract class REST_Controller extends Zend_Controller_Action
      */
     public function headAction()
     {
-        $request->_forward('get');
+        $this->_forward('get');
     }
 
     /**
@@ -57,25 +57,18 @@ abstract class REST_Controller extends Zend_Controller_Action
         $class = new ReflectionObject($this);
         $methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
 
+        $actions = array();
+
         foreach ($methods as &$method) {
             $name = strtoupper($method->name);
 
-            if (substr($name, -6) == 'ACTION') {
-                $actions[] = str_replace('ACTION', null, $name);
+            if (substr($name, -6) == 'ACTION' && $name != 'INDEXACTION') {
+                $actions[$name] = str_replace('ACTION', null, $name);
             }
         }
 
-        // nobody likes indexAction
-        unset($actions['INDEXACTION']);
-
         $this->_response->setBody(null);
         $this->_response->setHeader('Allow', implode(', ', $actions));
-
-        $requestMethod = $this->getRequest()->getHeader('Access-Control-Request-Method');
-
-        if (in_array($requestMethod, $actions))
-            $this->_response->setHttpResponseCode(200);
-        else
-            $this->_response->setHttpResponseCode(405);
+        $this->_response->setHttpResponseCode(200);
     }
 }
