@@ -56,7 +56,7 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
         $this->_response->setHeader('Access-Control-Max-Age', '86400');
         $this->_response->setHeader('Access-Control-Allow-Origin', '*');
         $this->_response->setHeader('Access-Control-Allow-Credentials', 'true');
-        $this->_response->setHeader('Access-Control-Allow-Headers', 'Accept, Content-Type, X-Requested-With, X-HTTP-Method-Override');
+        $this->_response->setHeader('Access-Control-Allow-Headers', 'Authorization, Origin, Accept, Content-Type, X-Requested-With, X-HTTP-Method-Override');
 
         // set response format
         $this->setResponseFormat($request);
@@ -85,7 +85,8 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
 
         if ($format == false) {
             $request->setParam('format', $this->defaultFormat);
-            $request->dispatchError(415, 'Unsupported Media/Format Type');
+            if ($request->isOptions() === FALSE)
+                $request->dispatchError(415, 'Unsupported Media/Format Type');
         } else {
             $request->setParam('format', $format);
         }
