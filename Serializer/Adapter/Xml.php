@@ -75,20 +75,54 @@ class REST_Serializer_Adapter_Xml extends Zend_Serializer_Adapter_AdapterAbstrac
             case 'object':
             case 'array':
                 foreach ($data as $key => $value) {
+                
                     if (is_object($value) and $value instanceOf DOMDocument and !empty($value->firstChild)) {
                         $node = $dom->importNode($value->firstChild, true);
                         $parent->appendChild($node);
                     } else {
-                        if (gettype($value) == 'array' and !is_numeric($key)) {
-                            $child = $parent->appendChild($dom->createElement($key));
-                            $this->createNodes($dom, $value, $child);
-                        } else {
-                            if (is_numeric($key)) {
-                                $key = sprintf('%s', $this->depluralize($parent->tagName));
-                            }
+                        $attributes = null;
+                        
+                        // SimpleXMLElements can contain key with @attribute as the key name
+                        // which indicates an associated array that should be applied to the xml element
 
-                            $child = $parent->appendChild($dom->createElement($key));
-                            $this->createNodes($dom, $value, $child);
+                        if (is_object($value) and $value instanceOf SimpleXMLElement) {
+                            $attributes = $value->attributes(); 
+                            $value = (array) $value;
+                        }
+
+                        // don't emit @attribute as an element of it's own
+                        if ($key[0] !== '@')
+                        {
+                            if (gettype($value) == 'array' and !is_numeric($key)) {
+                                $child = $parent->appendChild($dom->createElement($key));
+
+                                if ($attributes)
+                                {
+                                    foreach ($attributes as $attrKey => $attrValue)
+                                    {
+                                        $child->setAttribute($attrKey, $attrValue);
+                                    }
+                                }
+
+                                $this->createNodes($dom, $value, $child);
+                            } else {
+                            
+                                if (is_numeric($key)) {
+                                    $key = sprintf('%s', $this->depluralize($parent->tagName));
+                                }
+
+                                $child = $parent->appendChild($dom->createElement($key));
+                                
+                                if ($attributes)
+                                {
+                                    foreach ($attributes as $attrKey => $attrValue)
+                                    {
+                                        $child->setAttribute($attrKey, $attrValue);
+                                    }
+                                }
+
+                                $this->createNodes($dom, $value, $child);
+                            }
                         }
                     }
                 }
