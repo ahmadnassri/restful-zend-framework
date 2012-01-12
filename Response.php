@@ -5,7 +5,7 @@
  *
  */
 
-class REST_Response
+class REST_Response extends Zend_Controller_Response_Http
 {
     // Informational 1xx
     const HTTP_CONTINUE         = 100;
@@ -15,7 +15,7 @@ class REST_Response
     const OK                    = 200;
     const CREATED               = 201;
     const ACCEPTED              = 202;
-    const NONAUTHORITATIVE_INFO = 203;
+    const NONAUTHORITATIVE      = 203;
     const NO_CONTENT            = 204;
     const RESET_CONTENT         = 205;
     const PARTIAL_CONTENT       = 206;
@@ -54,63 +54,219 @@ class REST_Response
     const SERVER_ERROR          = 500;
     const NOT_IMPLEMENTED       = 501;
     const BAD_GATEWAY           = 502;
-    const NAVAILABLE            = 503;
+    const UNAVAILABLE           = 503;
     const GATEWAY_TIMEOUT       = 504;
     const UNSUPPORTED_VERSION   = 505;
     const BANDWIDTH_EXCEEDED    = 509;
 
-    protected static $messages = array(
-        // Informational 1xx
-        100 => 'Continue',
-        101 => 'Switching Protocols',
+    // Informational 1xx
+    function httpContinue()
+    {
+        $this->setHttpResponseCode(self::HTTP_CONTINUE);
+    }
 
-        // Success 2xx
-        200 => 'OK',
-        201 => 'Created',
-        202 => 'Accepted',
-        203 => 'Non-Authoritative Information',
-        204 => 'No Content',
-        205 => 'Reset Content',
-        206 => 'Partial Content',
+    function switchProtocols()
+    {
+        $this->setHttpResponseCode(self::SWITCH_PROTOCOLS);
+    }
 
-        // Redirection 3xx
-        300 => 'Multiple Choices',
-        301 => 'Moved Permanently',
-        302 => 'Found',  // 1.1
-        303 => 'See Other',
-        304 => 'Not Modified',
-        305 => 'Use Proxy',
-        // 306 is deprecated but reserved
-        307 => 'Temporary Redirect',
+    // Successful 2xx
+    public function Ok()
+    {
+        $this->setHttpResponseCode(self::OK);
+    }
 
-        // Client Error 4xx
-        400 => 'Bad Request',
-        401 => 'Unauthorized',
-        402 => 'Payment Required',
-        403 => 'Forbidden',
-        404 => 'Not Found',
-        405 => 'Method Not Allowed',
-        406 => 'Not Acceptable',
-        407 => 'Proxy Authentication Required',
-        408 => 'Request Timeout',
-        409 => 'Conflict',
-        410 => 'Gone',
-        411 => 'Length Required',
-        412 => 'Precondition Failed',
-        413 => 'Request Entity Too Large',
-        414 => 'Request-URI Too Long',
-        415 => 'Unsupported Media Type',
-        416 => 'Requested Range Not Satisfiable',
-        417 => 'Expectation Failed',
+    public function created()
+    {
+        $this->setHttpResponseCode(self::CREATED);
+    }
 
-        // Server Error 5xx
-        500 => 'Internal Server Error',
-        501 => 'Not Implemented',
-        502 => 'Bad Gateway',
-        503 => 'Service Unavailable',
-        504 => 'Gateway Timeout',
-        505 => 'HTTP Version Not Supported',
-        509 => 'Bandwidth Limit Exceeded'
-    );
+    public function accepted()
+    {
+        $this->setHttpResponseCode(self::ACCEPTED);
+    }
+
+    public function nonAuthoritative()
+    {
+        $this->setHttpResponseCode(self::NONAUTHORITATIVE);
+    }
+
+    public function noContent()
+    {
+        $this->setHttpResponseCode(self::NO_CONTENT);
+    }
+
+    public function resetContent()
+    {
+        $this->setHttpResponseCode(self::RESET_CONTENT);
+    }
+
+    public function partialContent()
+    {
+        $this->setHttpResponseCode(self::PARTIAL_CONTENT);
+    }
+
+    // Redirection 3xx
+    public function multipleChoices()
+    {
+        $this->setHttpResponseCode(self::MULTIPLE_CHOICES);
+    }
+
+    public function movedPermanently()
+    {
+        $this->setHttpResponseCode(self::MOVED_PERMANENTLY);
+    }
+
+    public function found()
+    {
+        $this->setHttpResponseCode(self::FOUND);
+    }
+
+    public function SEE_OTHER()
+    {
+        $this->setHttpResponseCode(self::NO_CONTENT);
+    }
+
+    public function notModified()
+    {
+        $this->setHttpResponseCode(self::NOT_MODIFIED);
+    }
+
+    public function useProxy()
+    {
+        $this->setHttpResponseCode(self::USE_PROXY);
+    }
+
+    public function tempRedirect()
+    {
+        $this->setHttpResponseCode(self::TEMP_REDIRECT);
+    }
+
+    // Client Error 4xx
+    public function badRequest()
+    {
+        $this->setHttpResponseCode(self::BAD_REQUEST);
+    }
+
+    public function unauthorized()
+    {
+        $this->setHttpResponseCode(self::UNAUTHORIZED);
+    }
+
+    public function paymentRequired()
+    {
+        $this->setHttpResponseCode(self::PAYMENT_REQUIRED);
+    }
+
+    public function forbidden()
+    {
+        $this->setHttpResponseCode(self::FORBIDDEN);
+    }
+
+    public function notFound()
+    {
+        $this->setHttpResponseCode(self::NOT_FOUND);
+    }
+
+    public function notAllowed()
+    {
+        $this->setHttpResponseCode(self::NOT_ALLOWED);
+    }
+
+    public function notAcceptable()
+    {
+        $this->setHttpResponseCode(self::NOT_ACCEPTABLE);
+    }
+
+    public function proxyAuthRequired()
+    {
+        $this->setHttpResponseCode(self::PROXY_AUTH_REQUIRED);
+    }
+
+    public function requestTimeout()
+    {
+        $this->setHttpResponseCode(self::REQUEST_TIMEOUT);
+    }
+
+    public function conflict()
+    {
+        $this->setHttpResponseCode(self::CONFLICT);
+    }
+
+    public function gone()
+    {
+        $this->setHttpResponseCode(self::GONE);
+    }
+
+    public function lengthRequired()
+    {
+        $this->setHttpResponseCode(self::NO_CONTENT);
+    }
+
+    public function preconditionFailed()
+    {
+        $this->setHttpResponseCode(self::PRECONDITION_FAILED);
+    }
+
+    public function largeRequestEntity()
+    {
+        $this->setHttpResponseCode(self::LARGE_REQUEST_ENTITY);
+    }
+
+    public function longRequestUri()
+    {
+        $this->setHttpResponseCode(self::LONG_REQUEST_URI);
+    }
+
+    public function unsupportedType()
+    {
+        $this->setHttpResponseCode(self::UNSUPPORTED_TYPE);
+    }
+
+    public function unsatisfiableRange()
+    {
+        $this->setHttpResponseCode(self::UNSATISFIABLE_RANGE);
+    }
+
+    public function expectationFailed()
+    {
+        $this->setHttpResponseCode(self::EXPECTATION_FAILED);
+    }
+
+    // Server Error 5xx
+    public function serverError()
+    {
+        $this->setHttpResponseCode(self::SERVER_ERROR);
+    }
+
+    public function notImplemented()
+    {
+        $this->setHttpResponseCode(self::NOT_IMPLEMENTED);
+    }
+
+    public function badGateway()
+    {
+        $this->setHttpResponseCode(self::BAD_GATEWAY);
+    }
+
+    public function unavailable()
+    {
+        $this->setHttpResponseCode(self::UNAVAILABLE);
+    }
+
+    public function gatewayTimeout()
+    {
+        $this->setHttpResponseCode(self::GATEWAY_TIMEOUT);
+    }
+
+    public function unsupportedVersion()
+    {
+        $this->setHttpResponseCode(self::UNSUPPORTED_VERSION);
+    }
+
+    public function bandwidthExceeded()
+    {
+        $this->setHttpResponseCode(self::BANDWIDTH_EXCEEDED);
+    }
 }
 ?>
