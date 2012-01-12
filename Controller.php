@@ -70,6 +70,12 @@ abstract class REST_Controller extends Zend_Controller_Action
 
         $this->_response->setBody(null);
         $this->_response->setHeader('Allow', implode(', ', $actions));
-        $this->_response->setHttpResponseCode(405);
+
+        $requestMethod = $this->getRequest()->getHeader('Access-Control-Request-Method');
+
+        if (in_array($requestMethod, $actions))
+            $this->_response->setHttpResponseCode(200);
+        else
+            $this->_response->setHttpResponseCode(405);
     }
 }

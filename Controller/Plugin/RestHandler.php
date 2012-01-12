@@ -57,6 +57,7 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
         $this->_response->setHeader('Access-Control-Allow-Origin', '*');
         $this->_response->setHeader('Access-Control-Allow-Credentials', 'true');
         $this->_response->setHeader('Access-Control-Allow-Headers', 'Accept, Content-Type, X-Requested-With, X-HTTP-Method-Override');
+        $this->_response->setHeader('Access-Control-Allow-Headers', 'Authorization, Origin, Accept, Content-Type, X-Requested-With, X-HTTP-Method-Override');
 
         // set response format
         $this->setResponseFormat($request);
