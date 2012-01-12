@@ -86,7 +86,7 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
         if ($format == false) {
             $request->setParam('format', $this->defaultFormat);
             if ($request->isOptions() === FALSE)
-                $request->dispatchError(415, 'Unsupported Media/Format Type');
+                $request->dispatchError(REST_Response::UNSUPPORTED_TYPE, 'Unsupported Media/Format Type');
         } else {
             $request->setParam('format', $format);
         }
@@ -122,7 +122,7 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
             $this->_response->setHeader('Access-Control-Allow-Methods', implode(', ', $actions));
 
             if (!in_array(strtoupper($request->getMethod()), $actions)) {
-                $request->dispatchError(405, 'Method Not Allowed');
+                $request->dispatchError(REST_Response::NOT_ALLOWED, 'Method Not Allowed');
                 $this->_response->setHeader('Allow', implode(', ', $actions));
             }
         }
@@ -242,7 +242,7 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
                 $request->setParams($_POST);
 
             } catch (Exception $e) {
-                $request->dispatchError(400, 'Invalid Payload Format');
+                $request->dispatchError(REST_Response::BAD_REQUEST, 'Invalid Payload Format');
                 return;
             }
         }
