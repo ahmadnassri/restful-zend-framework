@@ -8,7 +8,7 @@
 class REST_Response
 {
     // Informational 1xx
-    const CONTINUE              = 100;
+    const HTTP_CONTINUE         = 100;
     const SWITCH_PROTOCOLS      = 101;
 
     // Successful 2xx
