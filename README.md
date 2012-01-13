@@ -36,6 +36,7 @@ autoloaderNamespaces[] = "REST_"
 add the following:
 
 ```php
+<?php
 public function _initREST()
 {
     $frontController = Zend_Controller_Front::getInstance();
@@ -56,6 +57,7 @@ public function _initREST()
 I use a modified Bootstraping method called "Active Bootstrap" (google it) to only run the bootstrap **_init** methods per active module, which saves me a lot of headaches.
 
 ```php
+<?php
 public function _initREST()
 {
     $frontController = Zend_Controller_Front::getInstance();
