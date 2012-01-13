@@ -72,3 +72,36 @@ public function _initREST()
     Zend_Controller_Action_HelperBroker::addHelper($restContexts);
 }
 ```
+
+## Module Specific ErrorController issue
+
+it seems there is an inherit issue with Zend Framework's modules & calling the  ErroController, basically ZF calls the default module's error controller for all modules.
+This can be a problem of course if one of your modules is an API, you'll end up with HTML in the REST ErrorController output.
+
+to fix this is beyond the scope of the REST library, so its only included in the README file:
+
+in your ```application.ini```
+
+```ini
+resources.frontController.plugins.ErrorHandler.class = "Zend_Controller_Plugin_ErrorHandler"
+resources.frontController.plugins.ErrorHandler.options.module = "default"
+resources.frontController.plugins.ErrorHandler.options.controller = "error"
+resources.frontController.plugins.ErrorHandler.options.action = "error"
+```
+
+then create a plugin to change the "module" scope, you can name this whatever you want, I went with ```App_Controller_Plugin_Errors```:
+
+```php
+<?php
+class App_Controller_Plugin_Errors extends Zend_Controller_Plugin_Abstract
+{
+    public function routeShutdown(Zend_Controller_Request_Abstract $request)
+    {
+        $frontController = Zend_Controller_Front::getInstance();
+
+        $error = $frontController->getPlugin('Zend_Controller_Plugin_ErrorHandler');
+
+        $error->setErrorHandlerModule($request->getModuleName());
+    }
+}
+```
