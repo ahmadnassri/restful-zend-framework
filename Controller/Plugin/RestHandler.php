@@ -41,8 +41,6 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
 
     public function __construct(Zend_Controller_Front $frontController)
     {
-        $request = $frontController->getRequest();
-
         $this->dispatcher = $frontController->getDispatcher();
     }
 
@@ -113,8 +111,10 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
             foreach ($methods as &$method) {
                 $name = strtoupper($method->name);
 
-                if (substr($name, -6) == 'ACTION' && $name != 'INDEXACTION') {
-                    $actions[$name] = str_replace('ACTION', null, $name);
+                if ($name == '__CALL') {
+                    $actions[] = $request->getMethod();
+                } elseif (substr($name, -6) == 'ACTION' && $name != 'INDEXACTION') {
+                    $actions[] = str_replace('ACTION', null, $name);
                 }
             }
 
