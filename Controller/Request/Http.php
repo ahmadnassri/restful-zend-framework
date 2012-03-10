@@ -22,6 +22,19 @@ class REST_Controller_Request_Http extends Zend_Controller_Request_Http
         return $this->_error !== false;
     }
 
+    public function getMethod()
+    {
+        if ($this->getParam('_method', false)) {
+            return strtoupper($this->getParam('_method'));
+        }
+
+        if ($this->getHeader('X-HTTP-Method-Override')) {
+            return strtoupper($this->getHeader('X-HTTP-Method-Override'));
+        }
+
+        return $this->getServer('REQUEST_METHOD');
+    }
+
     public function dispatchError($code, $message)
     {
         $this->setError($code, $message);
