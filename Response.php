@@ -122,7 +122,7 @@ class REST_Response extends Zend_Controller_Response_Http
         $this->setHttpResponseCode(self::FOUND);
     }
 
-    public function SEE_OTHER()
+    public function seeOther()
     {
         $this->setHttpResponseCode(self::NO_CONTENT);
     }
