@@ -78,6 +78,10 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
             $format = $request->getParam('format');
         } else {
             $bestMimeType = $this->negotiateContentType($request);
+            
+            //If still there's no any MimeType, assign default XML
+            if(!$bestMimeType || $bestMimeType == '*/*') $bestMimeType = 'application/xml';
+            
             $format = $this->responseTypes[$bestMimeType];
         }
 
