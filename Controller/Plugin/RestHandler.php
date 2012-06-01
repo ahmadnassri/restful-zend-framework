@@ -331,7 +331,7 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
         }
 
         // sort by quality descending
-        arsort($mimeTypes);
+        krsort($mimeTypes);
 
         return current(array_values($mimeTypes));
     }
