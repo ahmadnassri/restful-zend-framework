@@ -78,10 +78,10 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
             $format = $request->getParam('format');
         } else {
             $bestMimeType = $this->negotiateContentType($request);
-            
+
             //If still there's no any MimeType, assign default XML
             if(!$bestMimeType || $bestMimeType == '*/*') $bestMimeType = 'application/xml';
-            
+
             $format = $this->responseTypes[$bestMimeType];
         }
 
@@ -159,8 +159,10 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
             if ($request->isPost() && $contentType == 'multipart/form-data') {
                 // if there are files, lets modify the array to match what we've done below
                 foreach ($_FILES as &$file) {
-                    $data = file_get_contents($file['tmp_name']);
-                    $file['content'] = base64_encode($data);
+                    if (array_key_exists('tmp_name', $file) && is_file($file['tmp_name'])) {
+                        $data = file_get_contents($file['tmp_name']);
+                        $file['content'] = base64_encode($data);
+                    }
                 }
 
                 // reset the array pointer
