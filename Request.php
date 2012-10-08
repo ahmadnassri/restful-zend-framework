@@ -1,5 +1,5 @@
 <?php
-class REST_Controller_Request_Http extends Zend_Controller_Request_Http
+class REST_Request extends Zend_Controller_Request_Http
 {
     private $_error = false;
 
