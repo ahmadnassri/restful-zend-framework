@@ -57,6 +57,12 @@ class REST_Controller_Action_Helper_ContextSwitch extends Zend_Controller_Action
                             'init' => 'initAbstractContext',
                             'post' => 'restContext'
                         )
+                    ),
+
+                    'html' => array(
+                        'headers'   => array(
+                            'Content-Type' => 'text/html'
+                        )
                     )
                 )
             );

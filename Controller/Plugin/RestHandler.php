@@ -8,10 +8,18 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
 {
     private $dispatcher;
 
-    private $defaultFormat = 'json';
+    private $defaultFormat = 'html';
+
+    private $acceptableFormats = array(
+        'html',
+        'xml',
+        'php',
+        'json'
+    );
 
     private $responseTypes = array(
-        '*/*'                               => false,
+        'text/html'                         => 'html',
+        'application/xhtml+xml'             => 'html',
         'text/xml'                          => 'xml',
         'application/xml'                   => 'xml',
         'application/xhtml+xml'             => 'xml',
@@ -56,6 +64,9 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
         $this->_response->setHeader('Access-Control-Allow-Credentials', 'true');
         $this->_response->setHeader('Access-Control-Allow-Headers', 'Authorization, X-Authorization, Origin, Accept, Content-Type, X-Requested-With, X-HTTP-Method-Override');
 
+        // set config settings from application.ini
+        $this->setConfig();
+
         // set response format
         $this->setResponseFormat($request);
 
@@ -66,6 +77,19 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
         $this->handleRequestBody($request);
     }
 
+    private function setConfig()
+    {
+        $frontController = Zend_Controller_Front::getInstance();
+        $options = new Zend_Config($frontController->getParam('bootstrap')->getOptions(), true);
+
+        $rest = $options->get('rest', false);
+
+        if ($rest) {
+            $this->defaultFormat = $rest->default;
+            $this->acceptableFormats = $rest->formats->toArray();
+        }
+    }
+
     /**
      * sets the response format and content type
      * uses the "format" query string paramter and the HTTP Accept header
@@ -74,21 +98,26 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
     {
         $format = false;
 
+        // check query string first
         if (in_array($request->getParam('format', 'none'), $this->responseTypes)) {
             $format = $request->getParam('format');
         } else {
             $bestMimeType = $this->negotiateContentType($request);
 
-            //If still there's no any MimeType, assign default XML
-            if(!$bestMimeType || $bestMimeType == '*/*') $bestMimeType = 'application/xml';
+            // if there's no matching MimeType, assign default XML
+            if (!$bestMimeType || $bestMimeType == '*/*') {
+                $bestMimeType = 'application/xml';
+            }
 
             $format = $this->responseTypes[$bestMimeType];
         }
 
-        if ($format == false) {
+        if ($format == false or !in_array($format, $this->acceptableFormats)) {
             $request->setParam('format', $this->defaultFormat);
-            if ($request->isOptions() === FALSE)
+
+            if ($request->isOptions() === false) {
                 $request->dispatchError(REST_Response::UNSUPPORTED_TYPE, 'Unsupported Media/Format Type');
+            }
         } else {
             $request->setParam('format', $format);
         }
