@@ -15,6 +15,66 @@ class REST_Controller_Action_Helper_ContextSwitch extends Zend_Controller_Action
         'php'   => 'Zend_Serializer_Adapter_PhpSerialize'
     );
 
+    protected $_rest_contexts = array(
+        'json' => array(
+            'suffix'    => 'json',
+            'headers'   => array(
+                'Content-Type' => 'application/json'
+            ),
+
+            'options' => array(
+                'autoDisableLayout' => true,
+            ),
+
+            'callbacks' => array(
+                'init' => 'initAbstractContext',
+                'post' => 'restContext'
+            ),
+        ),
+
+        'xml' => array(
+            'suffix'    => 'xml',
+            'headers'   => array(
+                'Content-Type' => 'application/xml'
+            ),
+
+            'options' => array(
+                'autoDisableLayout' => true,
+            ),
+
+            'callbacks' => array(
+                'init' => 'initAbstractContext',
+                'post' => 'restContext'
+            ),
+        ),
+
+        'php' => array(
+            'suffix'    => 'php',
+            'headers'   => array(
+                'Content-Type' => 'application/x-httpd-php'
+            ),
+
+            'options' => array(
+                'autoDisableLayout' => true,
+            ),
+
+            'callbacks' => array(
+                'init' => 'initAbstractContext',
+                'post' => 'restContext'
+            )
+        ),
+
+        'html' => array(
+            'headers'   => array(
+                'Content-Type' => 'text/html; Charset=UTF-8'
+            ),
+
+            'options' => array(
+                'autoDisableLayout' => false,
+            )
+        )
+    );
+
     public function __construct($options = null)
     {
         if ($options instanceof Zend_Config) {
@@ -24,51 +84,16 @@ class REST_Controller_Action_Helper_ContextSwitch extends Zend_Controller_Action
         }
 
         if (empty($this->_contexts)) {
-            $this->addContexts(
-                array(
-                    'json' => array(
-                        'suffix'    => 'json',
-                        'headers'   => array(
-                            'Content-Type' => 'application/json'
-                        ),
-                        'callbacks' => array(
-                            'init' => 'initAbstractContext',
-                            'post' => 'restContext'
-                        ),
-                    ),
-
-                    'xml' => array(
-                        'suffix'    => 'xml',
-                        'headers'   => array(
-                            'Content-Type' => 'application/xml'
-                        ),
-                        'callbacks' => array(
-                            'init' => 'initAbstractContext',
-                            'post' => 'restContext'
-                        ),
-                    ),
-
-                    'php' => array(
-                        'suffix'    => 'php',
-                        'headers'   => array(
-                            'Content-Type' => 'application/x-httpd-php'
-                        ),
-                        'callbacks' => array(
-                            'init' => 'initAbstractContext',
-                            'post' => 'restContext'
-                        )
-                    ),
-
-                    'html' => array(
-                        'headers'   => array(
-                            'Content-Type' => 'text/html'
-                        )
-                    )
-                )
-            );
+            $this->addContexts($this->_rest_contexts);
         }
 
         $this->init();
+    }
+
+    public function getAutoDisableLayout()
+    {
+        $context = $this->_actionController->getRequest()->getParam($this->getContextParam());
+        return $this->_rest_contexts[$context]['options']['autoDisableLayout'];
     }
 
     public function initAbstractContext()
