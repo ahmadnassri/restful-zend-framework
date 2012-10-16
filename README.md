@@ -61,6 +61,8 @@ public function _initREST()
 }
 ```
 
+In the above example, we are only enabling RESTful responses on a particular route, which is the `Api` module, look up the Zend_Rest_Route docs for further configuration options.
+
 ### application/modules/api/Bootstrap.php
 
 **Note:** depending on your setup, you may want to setup some advanced rules to enable the **REST Plugin** and the **Action Helpers** only when needed.
