@@ -7,12 +7,12 @@ for a working example please refer to https://github.com/codeinchaos/restful-zen
 
 ## Assumptions
 * you are building a mixed application (regular ZF Controllers + RESTful controllers)
-* the RESTful part is a separate module called "api"
-* the "api" module may contain a mix of regular controllers and RESTful controllers
+* your controllers can be a a mix of regular controllers and RESTful controllers or a hybrid!
 
 I recommend creating a separate module for the RESTful controllers, its less complicated to manage this way, and you don't have to worry about advanced REST routing ...
+However, you can have pie and eat it too! It's possible to have any single Controller act as both a REST controller and a typical Zend MVC controller (HTML output).
 
-you can still create regular Controllers in the module, ex: landing page IndexController ... however if you want to setup advanced routing rules with those controllers, its going to be a hassle!
+In this particular example, I'm using a separate module "Api" that is purely used for REST API calls.
 
 ## Steps
 1. Copy the **REST** directory into your **library**.
@@ -29,7 +29,17 @@ add the following:
 
 ```ini
 autoloaderNamespaces[] = "REST_"
+
+rest.default = "xml"
+rest.formats[] = "json"
+rest.formats[] = "xml"
 ```
+
+the above achieves a couple of things:
+
+1. Autoloads the REST library
+2. sets the default respond format when all content type negotiation fails (in the above example: `xml`)
+3. determines the list of content types you want to support in your API, built in types include: `html`, `xml`, `php`, `json`
 
 ### application/Bootstrap.php
 
@@ -77,7 +87,7 @@ public function _initREST()
 
 ## Module Specific ErrorController issue
 
-it seems there is an inherit issue with Zend Framework's modules & calling the  ErroController, basically ZF calls the default module's error controller for all modules.
+It seems there is an inherit issue with Zend Framework's modules & calling the  ErroController, basically ZF calls the default module's error controller for all modules.
 This can be a problem of course if one of your modules is an API, you'll end up with HTML in the REST ErrorController output.
 
 to fix this is beyond the scope of the REST library, so its only included in the README file:
