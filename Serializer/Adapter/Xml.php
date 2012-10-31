@@ -21,7 +21,7 @@ class REST_Serializer_Adapter_Xml extends Zend_Serializer_Adapter_AdapterAbstrac
         $opts = $opts + $this->_options;
 
         try {
-            $dom = new DOMDocument;
+            $dom = new DOMDocument('1.0', 'utf-8');
             $root = $dom->appendChild($dom->createElement($opts['rootNode']));
             $this->createNodes($dom, $value, $root, false);
             return $dom->saveXml();
