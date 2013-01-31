@@ -268,5 +268,22 @@ class REST_Response extends Zend_Controller_Response_Http
     {
         $this->setHttpResponseCode(self::BANDWIDTH_EXCEEDED);
     }
+
+
+    /**
+     * Return header value (if set); see {@link $_headers} for format
+     *
+     * @return string | boolean
+     */
+    public function getHeaderValue($name)
+    {
+        foreach ($this->_headers as $key => $header) {
+            if ($name == $header['name']) {
+                return $header['value'];
+            }
+        }
+
+        return false;
+    }
 }
 ?>
