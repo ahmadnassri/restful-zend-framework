@@ -3,7 +3,7 @@
 This extension for Zend Framework, allows to create RESTful Controllers with ease.
 please keep in mind that these instructions are general and you should probably customize the code to fit your needs.
 
-for a working example please refer to https://github.com/codeinchaos/restful-zend-framework-example
+for a working example please refer to [github.com/codeinchaos/restful-zend-framework-example](https://github.com/codeinchaos/restful-zend-framework-example)
 
 ## Assumptions
 * you are building a mixed application (regular ZF Controllers + RESTful controllers)
