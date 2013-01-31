@@ -9,7 +9,7 @@ for a working example please refer to https://github.com/codeinchaos/restful-zen
 * you are building a mixed application (regular ZF Controllers + RESTful controllers)
 * your controllers can be a a mix of regular controllers and RESTful controllers or a hybrid!
 
-I recommend creating a separate module for the RESTful controllers, its less complicated to manage this way, and you don't have to worry about advanced REST routing ...
+I recommend creating a separate [module](http://framework.zend.com/manual/1.12/en/zend.controller.modular.html) for the RESTful controllers, its less complicated to manage this way, and you don't have to worry about advanced REST routing ...
 However, you can have pie and eat it too! It's possible to have any single Controller act as both a REST controller and a typical Zend MVC controller (HTML output).
 
 In this particular example, I'm using a separate module "Api" that is purely used for REST API calls.
