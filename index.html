@@ -1,0 +1,157 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Restful Zend Framework by codeinchaos</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Restful Zend Framework</h1>
+        <p>RESTful services with Zend Framework</p>
+
+        <p class="view"><a href="https://github.com/codeinchaos/restful-zend-framework">View the Project on GitHub <small>codeinchaos/restful-zend-framework</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/codeinchaos/restful-zend-framework/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/codeinchaos/restful-zend-framework/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/codeinchaos/restful-zend-framework">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>This extension for Zend Framework, allows to create RESTful Controllers with ease.
+please keep in mind that these instructions are general and you should probably customize the code to fit your needs.</p>
+
+<p>for a working example please refer to <a href="https://github.com/codeinchaos/restful-zend-framework-example">github.com/codeinchaos/restful-zend-framework-example</a></p>
+
+<h2>Assumptions</h2>
+
+<ul>
+<li>you are building a mixed application (regular ZF Controllers + RESTful controllers)</li>
+<li>your controllers can be a a mix of regular controllers and RESTful controllers or a hybrid!</li>
+</ul><p>I recommend creating a separate <a href="http://framework.zend.com/manual/1.12/en/zend.controller.modular.html">module</a> for the RESTful controllers, its less complicated to manage this way, and you don't have to worry about advanced REST routing ...
+However, you can have pie and eat it too! It's possible to have any single Controller act as both a REST controller and a typical Zend MVC controller (HTML output).</p>
+
+<p>In this particular example, I'm using a separate module "Api" that is purely used for REST API calls.</p>
+
+<h2>Steps</h2>
+
+<ol>
+<li>Copy the <strong>REST</strong> directory into your <strong>library</strong>.</li>
+<li>modify <strong>application.ini</strong>.</li>
+<li>modify <strong>application/Bootstrap.php</strong>.</li>
+<li>modify your RESTful module Bootstrap ex: <strong>application/modules/api/Bootstrap.php</strong>.</li>
+<li>create Controllers as usual, just make sure they extends <strong>REST_Controller</strong>.</li>
+<li>check <a href="https://github.com/codeinchaos/restful-zend-framework-example">https://github.com/codeinchaos/restful-zend-framework-example</a> for examples.</li>
+<li>reccomended: use the Api_ErrorController provided in the example above, modify to your needs.</li>
+</ol><h3>application.ini:</h3>
+
+<p>add the following:</p>
+
+<div class="highlight"><pre><span class="na">autoloaderNamespaces[]</span> <span class="o">=</span> <span class="s">"REST_"</span>
+
+<span class="na">rest.default</span> <span class="o">=</span> <span class="s">"xml"</span>
+<span class="na">rest.formats[]</span> <span class="o">=</span> <span class="s">"json"</span>
+<span class="na">rest.formats[]</span> <span class="o">=</span> <span class="s">"xml"</span>
+</pre></div>
+
+<p>the above achieves a couple of things:</p>
+
+<ol>
+<li>Autoloads the REST library</li>
+<li>sets the default respond format when all content type negotiation fails (in the above example: <code>xml</code>)</li>
+<li>determines the list of content types you want to support in your API, built in types include: <code>html</code>, <code>xml</code>, <code>php</code>, <code>json</code>
+</li>
+</ol><h3>application/Bootstrap.php</h3>
+
+<p>add the following:</p>
+
+<div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">_initREST</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nv">$frontController</span> <span class="o">=</span> <span class="nx">Zend_Controller_Front</span><span class="o">::</span><span class="na">getInstance</span><span class="p">();</span>
+
+    <span class="c1">// set custom request object</span>
+    <span class="nv">$frontController</span><span class="o">-&gt;</span><span class="na">setRequest</span><span class="p">(</span><span class="k">new</span> <span class="nx">REST_Request</span><span class="p">);</span>
+    <span class="nv">$frontController</span><span class="o">-&gt;</span><span class="na">setResponse</span><span class="p">(</span><span class="k">new</span> <span class="nx">REST_Response</span><span class="p">);</span>
+
+    <span class="c1">// add the REST route for the API module only</span>
+    <span class="nv">$restRoute</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Zend_Rest_Route</span><span class="p">(</span><span class="nv">$frontController</span><span class="p">,</span> <span class="k">array</span><span class="p">(),</span> <span class="k">array</span><span class="p">(</span><span class="s1">'api'</span><span class="p">));</span>
+    <span class="nv">$frontController</span><span class="o">-&gt;</span><span class="na">getRouter</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">addRoute</span><span class="p">(</span><span class="s1">'rest'</span><span class="p">,</span> <span class="nv">$restRoute</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>In the above example, we are only enabling RESTful responses on a particular route, which is the <code>Api</code> module, look up the <code>Zend_Rest_Route</code> docs for further configuration options.</p>
+
+<h3>application/modules/api/Bootstrap.php</h3>
+
+<p><strong>Note:</strong> depending on your setup, you may want to setup some advanced rules to enable the <strong>REST Plugin</strong> and the <strong>Action Helpers</strong> only when needed.
+I use a modified Bootstraping method called "Active Bootstrap" (google it) to only run the bootstrap <strong>_init</strong> methods per active module, which saves me a lot of headaches.</p>
+
+<div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">_initREST</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="nv">$frontController</span> <span class="o">=</span> <span class="nx">Zend_Controller_Front</span><span class="o">::</span><span class="na">getInstance</span><span class="p">();</span>
+
+    <span class="c1">// register the RestHandler plugin</span>
+    <span class="nv">$frontController</span><span class="o">-&gt;</span><span class="na">registerPlugin</span><span class="p">(</span><span class="k">new</span> <span class="nx">REST_Controller_Plugin_RestHandler</span><span class="p">(</span><span class="nv">$frontController</span><span class="p">));</span>
+
+    <span class="c1">// add REST contextSwitch helper</span>
+    <span class="nv">$contextSwitch</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">REST_Controller_Action_Helper_ContextSwitch</span><span class="p">();</span>
+    <span class="nx">Zend_Controller_Action_HelperBroker</span><span class="o">::</span><span class="na">addHelper</span><span class="p">(</span><span class="nv">$contextSwitch</span><span class="p">);</span>
+
+    <span class="c1">// add restContexts helper</span>
+    <span class="nv">$restContexts</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">REST_Controller_Action_Helper_RestContexts</span><span class="p">();</span>
+    <span class="nx">Zend_Controller_Action_HelperBroker</span><span class="o">::</span><span class="na">addHelper</span><span class="p">(</span><span class="nv">$restContexts</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>Module Specific ErrorController issue</h2>
+
+<p>It seems there is an inherit issue with Zend Framework's modules &amp; calling the  ErroController, basically ZF calls the default module's error controller for all modules.
+This can be a problem of course if one of your modules is an API, you'll end up with HTML in the REST ErrorController output.</p>
+
+<p>to fix this is beyond the scope of the REST library, so its only included in the README file:</p>
+
+<p>in your <code>application.ini</code></p>
+
+<div class="highlight"><pre><span class="na">resources.frontController.plugins.ErrorHandler.class</span> <span class="o">=</span> <span class="s">"Zend_Controller_Plugin_ErrorHandler"</span>
+<span class="na">resources.frontController.plugins.ErrorHandler.options.module</span> <span class="o">=</span> <span class="s">"default"</span>
+<span class="na">resources.frontController.plugins.ErrorHandler.options.controller</span> <span class="o">=</span> <span class="s">"error"</span>
+<span class="na">resources.frontController.plugins.ErrorHandler.options.action</span> <span class="o">=</span> <span class="s">"error"</span>
+</pre></div>
+
+<p>then create a plugin to change the "module" scope, you can name this whatever you want, I went with <code>App_Controller_Plugin_Errors</code>:</p>
+
+<div class="highlight"><pre><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="k">class</span> <span class="nc">App_Controller_Plugin_Errors</span> <span class="k">extends</span> <span class="nx">Zend_Controller_Plugin_Abstract</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">routeShutdown</span><span class="p">(</span><span class="nx">Zend_Controller_Request_Abstract</span> <span class="nv">$request</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$frontController</span> <span class="o">=</span> <span class="nx">Zend_Controller_Front</span><span class="o">::</span><span class="na">getInstance</span><span class="p">();</span>
+
+        <span class="nv">$error</span> <span class="o">=</span> <span class="nv">$frontController</span><span class="o">-&gt;</span><span class="na">getPlugin</span><span class="p">(</span><span class="s1">'Zend_Controller_Plugin_ErrorHandler'</span><span class="p">);</span>
+
+        <span class="nv">$error</span><span class="o">-&gt;</span><span class="na">setErrorHandlerModule</span><span class="p">(</span><span class="nv">$request</span><span class="o">-&gt;</span><span class="na">getModuleName</span><span class="p">());</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/codeinchaos">codeinchaos</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
