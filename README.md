@@ -89,7 +89,7 @@ public function _initREST()
 
 ## Module Specific ErrorController issue
 
-It seems there is an inherit issue with Zend Framework's modules & calling the  ErroController, basically ZF calls the default module's error controller for all modules.
+It seems there is an inherit issue with Zend Framework's modules & calling the  ErrorController, basically ZF calls the default module's error controller for all modules.
 This can be a problem of course if one of your modules is an API, you'll end up with HTML in the REST ErrorController output.
 
 to fix this is beyond the scope of the REST library, so its only included in the README file:
