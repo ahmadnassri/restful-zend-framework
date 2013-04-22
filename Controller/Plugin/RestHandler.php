@@ -295,6 +295,9 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
         if ($this->reflectionClass === null) {
             // get the dispatcher to load the controller class
             $controller = $this->dispatcher->getControllerClass($request);
+            // if no controller present escape silently...
+            if ($controller === false) return false;
+            // ... load controller class
             $className  = $this->dispatcher->loadClass($controller);
 
             // extract the actions through reflection
