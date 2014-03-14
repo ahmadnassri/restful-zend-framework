@@ -119,3 +119,7 @@ class App_Controller_Plugin_Errors extends Zend_Controller_Plugin_Abstract
     }
 }
 ```
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/codeinchaos/restful-zend-framework/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
