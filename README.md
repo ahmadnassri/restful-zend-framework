@@ -1,4 +1,4 @@
-# RESTful Applications with Zend Framework
+# RESTful Applications with Zend Framework [![Total views][sourcegraph-image]][sourcegraph-url]
 
 This extension for Zend Framework, allows to create RESTful Controllers with ease.
 please keep in mind that these instructions are general and you should probably customize the code to fit your needs.
@@ -119,3 +119,56 @@ class App_Controller_Plugin_Errors extends Zend_Controller_Plugin_Abstract
     }
 }
 ```
+
+## Bugs and feature requests
+
+Have a bug or a feature request? Please first read the [issue guidelines](CONTRIBUTING.md#using-the-issue-tracker) and search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/codeinchaos/restful-zend-framework/issues/new).
+
+## Contributing
+
+Please read through our [contributing guidelines](CONTRIBUTING.md). Included are directions for opening issues, coding standards, and notes on development.
+
+More over, if your pull request contains JavaScript patches or features, you must include relevant unit tests.
+
+Editor preferences are available in the [editor config](.editorconfig) for easy use in common text editors. Read more and download plugins at <http://editorconfig.org>.
+
+### Contribute and Earn
+
+Donate bitcoins to this project or make commits and get tips for it. If your commit is accepted by project maintainer and there are bitcoins on its balance, you will get a tip!
+
+[![tip for next commit][tip4commit-image]][tip4commit-url]
+
+## Donating
+
+Donations are welcome to help support the continuous development of this project.
+
+[![GitTip][gittip-image]][gittip-url]
+[![PayPal][paypal-image]][paypal-url]
+
+## Community
+
+Keep track of development and updates.
+
+- Follow [@AhmadNassri](http://twitter.com/ahmadnassri) & [@CodeInChaos](http://twitter.com/codeinchaos) on Twitter.
+- Tweet [@CodeInChaos](http://twitter.com/codeinchaos) with any questions/personal support requests.
+- Read and subscribe to [My Blog](http://ahmadnassri.com).
+
+## Authors
+
+**Ahmad Nassri**
+
+- Twitter: [@AhmadNassri](http://twitter.com/ahmadnassri)
+- Website: [ahmadnassri.com](http://ahmadnassri.com)
+
+## License
+
+Licensed under [the MIT license](LICENSE).
+
+[sourcegraph-url]: https://sourcegraph.com/github.com/codeinchaos/restful-zend-framework
+[sourcegraph-image]: https://sourcegraph.com/api/repos/github.com/codeinchaos/restful-zend-framework/counters/views.png
+[gittip-url]: https://www.gittip.com/ahmadnassri/
+[gittip-image]: http://img.shields.io/gittip/ahmadnassri.svg
+[paypal-url]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJ2B2BTK9VLRS&on0=project&os0=restful-zend-framework
+[paypal-image]: http://img.shields.io/badge/PayPal-Donate-green.svg
+[tip4commit-url]: http://tip4commit.com/projects/644
+[tip4commit-image]: http://tip4commit.com/projects/644.svg
