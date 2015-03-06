@@ -93,6 +93,12 @@ class REST_Controller_Plugin_RestHandler extends Zend_Controller_Plugin_Abstract
         if ($rest) {
             $this->defaultFormat = $rest->default;
             $this->acceptableFormats = $rest->formats->toArray();
+            
+            foreach($this->responseTypes as $mime => $format) {
+                if (!in_array($format, $this->acceptableFormats)) {
+                    unset($this->responseTypes[$mime]);
+                }
+            }
         }
     }
 
