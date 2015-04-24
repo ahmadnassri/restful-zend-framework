@@ -152,4 +152,4 @@ Donations are welcome to help support the continuous development of this project
 [flattr-image]: http://img.shields.io/badge/flattr-donate-green.svg?style=flat-square
 
 [bitcoin-image]: http://img.shields.io/badge/bitcoin-1Nb46sZRVG3or7pNaDjthcGJpWhvoPpCxy-green.svg?style=flat-square
-[bitcoin-url]: https://www.coinbase.com/checkouts/7579a122f0cb2e7e4bbc2de9d780caa5
+[bitcoin-url]: https://www.coinbase.com/checkouts/ae383ae6bb931a2fa5ad11cec115191e?name=restful-zend-framework
