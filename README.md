@@ -1,4 +1,4 @@
-# RESTful Applications with Zend Framework [![Total views][sourcegraph-image]][sourcegraph-url]
+# RESTful Applications with Zend Framework
 
 This extension for Zend Framework, allows to create RESTful Controllers with ease.
 please keep in mind that these instructions are general and you should probably customize the code to fit your needs.
@@ -46,7 +46,6 @@ the above achieves a couple of things:
 add the following:
 
 ```php
-<?php
 public function _initREST()
 {
     $frontController = Zend_Controller_Front::getInstance();
@@ -69,7 +68,6 @@ In the above example, we are only enabling RESTful responses on a particular rou
 I use a modified Bootstraping method called "Active Bootstrap" (google it) to only run the bootstrap **_init** methods per active module, which saves me a lot of headaches.
 
 ```php
-<?php
 public function _initREST()
 {
     $frontController = Zend_Controller_Front::getInstance();
@@ -94,7 +92,7 @@ This can be a problem of course if one of your modules is an API, you'll end up 
 
 to fix this is beyond the scope of the REST library, so its only included in the README file:
 
-in your ```application.ini```
+in your `application.ini`
 
 ```ini
 resources.frontController.plugins.ErrorHandler.class = "Zend_Controller_Plugin_ErrorHandler"
@@ -103,10 +101,9 @@ resources.frontController.plugins.ErrorHandler.options.controller = "error"
 resources.frontController.plugins.ErrorHandler.options.action = "error"
 ```
 
-then create a plugin to change the "module" scope, you can name this whatever you want, I went with ```App_Controller_Plugin_Errors```:
+then create a plugin to change the "module" scope, you can name this whatever you want, I went with `App_Controller_Plugin_Errors`:
 
 ```php
-<?php
 class App_Controller_Plugin_Errors extends Zend_Controller_Plugin_Abstract
 {
     public function routeShutdown(Zend_Controller_Request_Abstract $request)
@@ -132,43 +129,27 @@ More over, if your pull request contains JavaScript patches or features, you mus
 
 Editor preferences are available in the [editor config](.editorconfig) for easy use in common text editors. Read more and download plugins at <http://editorconfig.org>.
 
-### Contribute and Earn
-
-Donate bitcoins to this project or make commits and get tips for it. If your commit is accepted by project maintainer and there are bitcoins on its balance, you will get a tip!
-
-[![tip for next commit][tip4commit-image]][tip4commit-url]
-
-## Donating
+## Support
 
 Donations are welcome to help support the continuous development of this project.
 
-[![GitTip][gittip-image]][gittip-url]
+[![Gratipay][gratipay-image]][gratipay-url]
 [![PayPal][paypal-image]][paypal-url]
-
-## Community
-
-Keep track of development and updates.
-
-- Follow [@AhmadNassri](http://twitter.com/ahmadnassri) & [@CodeInChaos](http://twitter.com/codeinchaos) on Twitter.
-- Tweet [@CodeInChaos](http://twitter.com/codeinchaos) with any questions/personal support requests.
-- Read and subscribe to [My Blog](http://ahmadnassri.com).
-
-## Authors
-
-**Ahmad Nassri**
-
-- Twitter: [@AhmadNassri](http://twitter.com/ahmadnassri)
-- Website: [ahmadnassri.com](http://ahmadnassri.com)
+[![Flattr][flattr-image]][flattr-url]
+[![Bitcoin][bitcoin-image]][bitcoin-url]
 
 ## License
 
-Licensed under [the MIT license](LICENSE).
+[MIT](LICENSE) &copy; [Ahmad Nassri](https://www.ahmadnassri.com)
 
-[sourcegraph-url]: https://sourcegraph.com/github.com/codeinchaos/restful-zend-framework
-[sourcegraph-image]: https://sourcegraph.com/api/repos/github.com/codeinchaos/restful-zend-framework/counters/views.png
-[gittip-url]: https://www.gittip.com/ahmadnassri/
-[gittip-image]: http://img.shields.io/gittip/ahmadnassri.svg
-[paypal-url]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJ2B2BTK9VLRS&on0=project&os0=restful-zend-framework
-[paypal-image]: http://img.shields.io/badge/PayPal-Donate-green.svg
-[tip4commit-url]: http://tip4commit.com/projects/644
-[tip4commit-image]: http://tip4commit.com/projects/644.svg
+[gratipay-url]: https://www.gratipay.com/ahmadnassri/
+[gratipay-image]: https://img.shields.io/gratipay/ahmadnassri.svg?style=flat-square
+
+[paypal-url]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UJ2B2BTK9VLRS&on0=project&os0=unnamed
+[paypal-image]: http://img.shields.io/badge/paypal-donate-green.svg?style=flat-square
+
+[flattr-url]: https://flattr.com/submit/auto?user_id=codeinchaos&url=https://github.com/ahmadnassri/unnamed&title=unnamed&language=&tags=github&category=software
+[flattr-image]: http://img.shields.io/badge/flattr-donate-green.svg?style=flat-square
+
+[bitcoin-image]: http://img.shields.io/badge/bitcoin-1Nb46sZRVG3or7pNaDjthcGJpWhvoPpCxy-green.svg?style=flat-square
+[bitcoin-url]: https://www.coinbase.com/checkouts/7579a122f0cb2e7e4bbc2de9d780caa5
