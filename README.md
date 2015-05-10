@@ -3,7 +3,7 @@
 This extension for Zend Framework, allows to create RESTful Controllers with ease.
 please keep in mind that these instructions are general and you should probably customize the code to fit your needs.
 
-for a working example please refer to [github.com/codeinchaos/restful-zend-framework-example](https://github.com/codeinchaos/restful-zend-framework-example)
+for a working example please refer to [github.com/ahmadnassri/restful-zend-framework-example](https://github.com/ahmadnassri/restful-zend-framework-example)
 
 ## Assumptions
 * you are building a mixed application (regular ZF Controllers + RESTful controllers)
@@ -20,7 +20,7 @@ In this particular example, I'm using a separate module "Api" that is purely use
 3. modify **application/Bootstrap.php**.
 4. modify your RESTful module Bootstrap ex: **application/modules/api/Bootstrap.php**.
 5. create Controllers as usual, just make sure they extends **REST_Controller**.
-6. check https://github.com/codeinchaos/restful-zend-framework-example for examples.
+6. check https://github.com/ahmadnassri/restful-zend-framework-example for examples.
 7. reccomended: use the Api_ErrorController provided in the example above, modify to your needs.
 
 ### application.ini:
@@ -119,7 +119,7 @@ class App_Controller_Plugin_Errors extends Zend_Controller_Plugin_Abstract
 
 ## Bugs and feature requests
 
-Have a bug or a feature request? Please first read the [issue guidelines](CONTRIBUTING.md#using-the-issue-tracker) and search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/codeinchaos/restful-zend-framework/issues/new).
+Have a bug or a feature request? Please first read the [issue guidelines](CONTRIBUTING.md#using-the-issue-tracker) and search for existing and closed issues. If your problem or idea is not addressed yet, [please open a new issue](https://github.com/ahmadnassri/restful-zend-framework/issues/new).
 
 ## Contributing
 
