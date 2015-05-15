@@ -41,7 +41,7 @@ class REST_Serializer_Adapter_Xml extends Zend_Serializer_Adapter_AdapterAbstrac
     public function unserialize($xml, array $opts = array())
     {
         try {
-            Zend_Json::fromXml($xml);
+            $json = Zend_Json::fromXml($xml);
             return (array) Zend_Json::decode($json, Zend_Json::TYPE_OBJECT);
         } catch (Exception $e) {
             require_once 'Zend/Serializer/Exception.php';
